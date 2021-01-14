@@ -25,8 +25,53 @@ public static void merge(SortableLinkedList original,SortableLinkedList[]buckets
     original.extend(buckets[i]);
   }
 }
-public static void main(String[] args) {
-  System.out.println(nth(123,1));
-System.out.println(  nth(-123,1));
+public static void radixSortSimple(SortableLinkedList data){
+  SortableLinkedList[]buckets = new SortableLinkedList[10];
+  for (int i=0; i<10; i++){
+    buckets[i] = new SortableLinkedList();
+  }
+  int current=1;
+  for (int i=0; i<current;i++){
+    while(data.size()>0){
+      if (length(data.get(0))>current){
+        current=length(data.get(0));
+      }
+      int element=data.get(0);
+      int digit= nth(element,i);
+      buckets[digit].add(element);
+      data.remove(0);
+    }
+    merge(data,buckets);
+  }
 }
+public static void radixSort(SortableLinkedList data){
+  SortableLinkedList whole= new SortableLinkedList();
+  SortableLinkedList negative= new SortableLinkedList();
+
+  for (int i=0; i<data.size(); i++){
+    if(data.get(i)>=0){
+         whole.add(data.get(i));
+        }
+        else{
+          negative.add(data.get(i) * -1);
+  }
+}
+radixSortSimple(whole);
+    radixSortSimple(negative);
+
+    for(int i = data.size() -1; i >= 0; i--){
+      data.remove(i);
+    }
+    //add from greatest abs to smallest
+    for (int i = negative.size() - 1; i >= 0; i--) {
+      data.add(negative.get(i) * -1);
+    }
+
+    data.extend(whole);
+  }
+
+//public static void main(String[] args) {
+  //System.out.println(nth(123,1));
+//System.out.println(  nth(-123,1));
+//}
 }
