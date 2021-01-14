@@ -10,16 +10,21 @@ public static int nth(int n, int col){
   return x %10;
 }
 
-//public static int length(int n){
+public static int length(int n){
 /*return the number of digits in n.
 length(0) -> 1
 length(15) -> 2
 length(-10) -> 2
 length(5112) -> 4*/
-//}
-//public static void merge(MyLinkedList original,MyLinkedList[]buckets){
-
-//}
+if (n==0)
+  return 0;
+return (int) (Math.log10(Math.abs(n))+1);
+}
+public static void merge(SortableLinkedList original,SortableLinkedList[]buckets){
+  for (int i=0; i<buckets.length; i++){
+    original.extend(buckets[i]);
+  }
+}
 public static void main(String[] args) {
   System.out.println(nth(123,1));
 System.out.println(  nth(-123,1));
