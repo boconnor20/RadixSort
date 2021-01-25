@@ -17,7 +17,7 @@ length(15) -> 2
 length(-10) -> 2
 length(5112) -> 4*/
 if (n==0)
-  return 0;
+  return 1;
 return (int) (Math.log10(Math.abs(n))+1);
 }
 public static void merge(SortableLinkedList original,SortableLinkedList[]buckets){
@@ -25,7 +25,7 @@ public static void merge(SortableLinkedList original,SortableLinkedList[]buckets
     original.extend(buckets[i]);
   }
 }
-public static void radixSortSimple(SortableLinkedList data){
+public static void radixSortSimpleZ(SortableLinkedList data){
   SortableLinkedList[]buckets = new SortableLinkedList[10];
   for (int i=0; i<10; i++){
     buckets[i] = new SortableLinkedList();
@@ -35,6 +35,7 @@ public static void radixSortSimple(SortableLinkedList data){
     while(data.size()>0){
       if (length(data.get(0))>current){
         current=length(data.get(0));
+
       }
       int element=data.get(0);
       int digit= nth(element,i);
@@ -44,24 +45,50 @@ public static void radixSortSimple(SortableLinkedList data){
     merge(data,buckets);
   }
 }
+  public static void radixSortSimple(SortableLinkedList data){
+    SortableLinkedList[]buckets = new SortableLinkedList[10];
+    for (int i=0; i<10; i++){
+      buckets[i] = new SortableLinkedList();
+    }
+    //find max digits
+    int max=0;
+    while(data.size()!=0){
+      int tempmax=data.get(0);
+      if (length(tempmax)>max){
+        max=length(tempmax);
+      }
+        buckets[nth(tempmax,0)].add(tempmax);
+        data.remove(0);
+      }
+
+      merge(data, buckets);
+      for (int i=0; i<max;i++){
+        while (data.size()!=0){
+          int temp=data.get(0);
+          buckets[nth(temp,i)].add(temp);
+          data.remove(0);
+        }
+        merge(data, buckets);
+      }
+
+  }
+
 public static void radixSort(SortableLinkedList data){
   SortableLinkedList whole= new SortableLinkedList();
   SortableLinkedList negative= new SortableLinkedList();
 
   for (int i=0; i<data.size(); i++){
     if(data.get(i)>=0){
-         whole.add(data.get(i));
+         whole.add(data.remove(i));
         }
         else{
-          negative.add(data.get(i) * -1);
+          negative.add(data.remove(i) * -1);
   }
 }
-radixSortSimple(whole);
+    radixSortSimple(whole);
     radixSortSimple(negative);
+    
 
-    for(int i = data.size() -1; i >= 0; i--){
-      data.remove(i);
-    }
     //add from greatest abs to smallest
     for (int i = negative.size() - 1; i >= 0; i--) {
       data.add(negative.get(i) * -1);
